@@ -1,0 +1,72 @@
+package br.utfpr.sockets.model;
+
+/**
+ * Created by bruno on 07/09/15.
+ */
+public class Message {
+    //private String body;
+    private byte[] body;
+    private String fromIP;
+    private int fromPort;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Constructors
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public Message(String body) {
+        this.body = new byte[1000];
+
+        this.body = body.getBytes();
+    }
+
+    public Message() {
+        this.body = new byte[1000];
+    }
+
+    /***
+     * This method handler raw messages and construct correctly body     *
+     *
+     * @param body     request message
+     * @param fromPort origin client port
+     */
+    public Message(String body, int fromPort) {
+        this.body = new byte[1000];
+        this.fromPort = fromPort;
+        this.body = handlerMessage(body);
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Private Methods
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    private byte[] handlerMessage(String body) {
+        if (body == KEEPALIVE) {
+            return new String("KEEPALIVE for client=" + fromPort).getBytes();
+        }
+
+        return null;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Public Methods
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public int getLength() {
+        return body.length;
+    }
+
+    public byte[] getBody() {
+        return body;
+    }
+
+    public void setBody(byte[] body) {
+        this.body = body;
+    }
+
+    @Override
+    public String toString() {
+        return body.toString();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Static message types
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    private static final String KEEPALIVE = "KEEPALIVE";
+
+}
